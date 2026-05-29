@@ -1,6 +1,426 @@
+/* RESET */
+
+*{
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+
+
+/* BODY */
+
+body{
+
+   font-family: Arial, sans-serif;
+
+   background-color: #f4f4f4;
+
+   padding: 40px;
+
+   display: flex;
+
+   justify-content: center;
+
+}
+
+
+
+/* MAIN CONTAINER */
+
+.container{
+
+   width: 100%;
+
+   max-width: 600px;
+
+   background-color: white;
+
+   padding: 25px;
+
+   border-radius: 12px;
+
+   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+}
+
+
+
+/* HEADING */
+
+h1{
+
+   text-align: center;
+
+   margin-bottom: 25px;
+
+   color: #333;
+
+}
+
+
+
+/* INPUT SECTION */
+
+.input-section{
+
+   display: flex;
+
+   gap: 10px;
+
+   margin-bottom: 20px;
+
+   flex-wrap: wrap;
+
+}
+
+
+
+/* TEXT INPUT */
+
+#taskInput{
+
+   flex: 1;
+
+   padding: 12px;
+
+   border: 1px solid #ccc;
+
+   border-radius: 6px;
+
+   font-size: 16px;
+
+}
+
+
+
+/* DATE INPUT */
+
+#dueDate{
+
+   padding: 12px;
+
+   border: 1px solid #ccc;
+
+   border-radius: 6px;
+
+   font-size: 16px;
+
+}
+
+
+
+/* PRIORITY DROPDOWN */
+
+#priority{
+
+   padding: 12px;
+
+   border: 1px solid #ccc;
+
+   border-radius: 6px;
+
+   font-size: 16px;
+
+}
+
+
+
+/* BUTTONS */
+
+button{
+
+   padding: 12px 16px;
+
+   border: none;
+
+   border-radius: 6px;
+
+   cursor: pointer;
+
+   font-size: 15px;
+
+   transition: 0.3s;
+
+}
+
+
+
+/* ADD BUTTON */
+
+#addBtn{
+
+   background-color: #007bff;
+
+   color: white;
+
+}
+
+#addBtn:hover{
+
+   background-color: #0056b3;
+
+}
+
+
+
+/* DARK MODE BUTTON */
+
+#darkModeBtn{
+
+   background-color: black;
+
+   color: white;
+
+}
+
+
+
+/* CLEAR ALL BUTTON */
+
+#clearAllBtn{
+
+   background-color: crimson;
+
+   color: white;
+
+}
+
+
+
+/* SEARCH INPUT */
+
+#searchInput{
+
+   width: 100%;
+
+   padding: 12px;
+
+   margin-bottom: 20px;
+
+   border: 1px solid #ccc;
+
+   border-radius: 6px;
+
+   font-size: 16px;
+
+}
+
+
+
+/* COUNTER */
+
+#counter{
+
+   margin-bottom: 15px;
+
+   font-weight: bold;
+
+   color: #444;
+
+}
+
+
+
+/* TASK LIST */
+
+#taskList{
+
+   list-style: none;
+
+}
+
+
+
+/* TASK ITEM */
+
+#taskList li{
+
+   background-color: #f9f9f9;
+
+   padding: 15px;
+
+   margin-bottom: 12px;
+
+   border-radius: 8px;
+
+   display: flex;
+
+   justify-content: space-between;
+
+   align-items: center;
+
+   gap: 10px;
+
+   flex-wrap: wrap;
+
+   border-left: 5px solid #007bff;
+
+}
+
+
+
+/* TASK TEXT */
+
+.task-text{
+
+   flex: 1;
+
+   font-size: 16px;
+
+   color: #333;
+
+}
+
+
+
+/* TASK BUTTONS */
+
+.task-buttons{
+
+   display: flex;
+
+   gap: 8px;
+
+}
+
+
+
+/* DELETE BUTTON */
+
+.deleteBtn{
+
+   background-color: crimson;
+
+   color: white;
+
+}
+
+.deleteBtn:hover{
+
+   background-color: darkred;
+
+}
+
+
+
+/* EDIT BUTTON */
+
+.editBtn{
+
+   background-color: orange;
+
+   color: white;
+
+}
+
+.editBtn:hover{
+
+   background-color: darkorange;
+
+}
+
+
+
+/* COMPLETED TASK */
+
 .completed{
 
    text-decoration: line-through;
 
+   opacity: 0.6;
+
 }
 
+
+
+/* PRIORITY COLORS */
+
+.high{
+
+   border-left: 5px solid red !important;
+
+}
+
+.medium{
+
+   border-left: 5px solid orange !important;
+
+}
+
+.low{
+
+   border-left: 5px solid green !important;
+
+}
+
+
+
+/* DARK MODE */
+
+.dark{
+
+   background-color: #121212;
+
+   color: white;
+
+}
+
+.dark .container{
+
+   background-color: #1e1e1e;
+
+}
+
+.dark h1{
+
+   color: white;
+
+}
+
+.dark #taskInput,
+.dark #searchInput,
+.dark #dueDate,
+.dark #priority{
+
+   background-color: #2a2a2a;
+
+   color: white;
+
+   border: 1px solid #555;
+
+}
+
+.dark #taskList li{
+
+   background-color: #2a2a2a;
+
+   color: white;
+
+}
+
+.dark #counter{
+
+   color: white;
+
+}
+
+
+
+/* RESPONSIVE */
+
+@media(max-width: 600px){
+
+   .input-section{
+
+      flex-direction: column;
+
+   }
+
+   button{
+
+      width: 100%;
+
+   }
+
+}

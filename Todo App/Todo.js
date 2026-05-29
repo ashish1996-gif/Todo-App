@@ -1,46 +1,123 @@
 let tasks = [];
-let addBtn = document.getElementById("addBtn");
+
+let addBtn =
+document.getElementById("addBtn");
 addBtn.addEventListener("click", addTask);
+
+// LOAD SAVED TASKS
+
+let savedTasks =
+JSON.parse(localStorage.getItem("tasks"));
+
+if(savedTasks){
+
+   tasks = savedTasks;
+
+   tasks.forEach(function(task){
+
+      createTask(task);
+
+   });
+   updateCounter();
+}
+
+// ADD TASK FUNCTION
 
 function addTask(){
 
-let input = document.getElementById("taskInput");
-let taskText = input.value;
-console.log(taskText);
+   let input =
+   document.getElementById("taskInput");
 
-if(taskText === ""){
+   let taskText = input.value;
 
-   alert("Please enter task");
+   if(taskText === ""){
 
-   return;
+      alert("Please enter task");
 
-} 
+      return;
 
-tasks.push(taskText);
+   }
 
-let li = document.createElement("li");
+   tasks.push(taskText);
 
-li.innerText = taskText;
+   createTask(taskText);
 
-document.getElementById("taskList")
-.appendChild(li);
+   saveTasks();
 
-input.value = "";
+   updateCounter();
+
+   input.value = "";
+
 }
 
-let deleteBtn = document.createElement("button");
-deleteBtn.innerText = "Delete";
-li.appendChild(deleteBtn);
+// CREATE TASK FUNCTION
 
-deleteBtn.addEventListener("click", function(){
-   li.remove();
-});
+function createTask(taskText){
 
-li.addEventListener("click", function(){
+   let li = document.createElement("li");
 
-   li.style.textDecoration = "line-through";
-   li.classList.toggle("completed");
-});
+   li.innerText = taskText;
+
+   // COMPLETE TASK
+
+   li.addEventListener("click", function(){
+
+      li.classList.toggle("completed");
+
+   });
+
+   // DELETE BUTTON
+
+   let deleteBtn =
+   document.createElement("button");
+
+   deleteBtn.innerText = "Delete";
+
+   deleteBtn.addEventListener("click", function(event){
+
+      event.stopPropagation();
+
+      li.remove();
+
+      tasks = tasks.filter(function(task){
+
+         return task !== taskText;
+
+      });
+
+      saveTasks();
+
+      updateCounter();
+
+   });
+
+   li.appendChild(deleteBtn);
+
+   document.getElementById("taskList")
+   .appendChild(li);
+
+}
+
+// UPDATE COUNTER
+
+function updateCounter(){
+   document.getElementById("counter")
+   .innerText =
+   `Total Tasks: ${tasks.length}`;
+}
+
+// SAVE TASKS
+
+function saveTasks(){
+
+   localStorage.setItem(
+      "tasks",
+      JSON.stringify(tasks)
+   );
+
+}
+
+// ENTER KEY SUPPORT
 
 document.getElementById("taskInput")
 .addEventListener("keypress", function(event){
@@ -53,49 +130,11 @@ document.getElementById("taskInput")
 
 });
 
-document.getElementById("counter")
-.innerText = `Total Tasks: ${tasks.length}`;
+document.getElementById("darkModeBtn")
+.addEventListener("click", function(){
 
-function updateCounter(){
-
-   document.getElementById("counter")
-   .innerText =
-   `Total Tasks: ${tasks.length}`;
-
-}
-
-updateCounter();
-
-localStorage.setItem(
-   "tasks",
-   JSON.stringify(tasks)
-);
-
-let savedTasks = JSON.parse(localStorage.getItem("tasks"));
-
-if(savedTasks){
-
-   tasks = savedTasks;
-
-}
-
-tasks.forEach(function(task){
-
-   createTask(task);
+   document.body.classList.toggle("dark");
 
 });
-
-function createTask(taskText){
-
-   let li = document.createElement("li");
-
-   li.innerText = taskText;
-
-   document.getElementById("taskList")
-   .appendChild(li);
-
-}
-
-
 
 
