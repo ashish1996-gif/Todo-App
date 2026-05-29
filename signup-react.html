@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React Signup Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #111;
+    }
+
+    .signup-card {
+      width: min(520px, 92vw);
+      background: #fff;
+      border: 2px solid #111;
+      border-radius: 18px;
+      padding: 34px 36px;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-card h2 {
+      margin: 0 0 28px;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #111;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1 1 220px;
+      margin-bottom: 0;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      width: auto;
+      margin: 0;
+      transform: translateY(1px);
+    }
+
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .submit-button:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .message {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #0b6121;
+    }
+
+    .error {
+      color: #b22222;
+    }
+
+    @media (max-width: 480px) {
+      .signup-card {
+        padding: 24px;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@supabase/supabase-js/dist/supabase.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Replace the values below with your own Supabase project URL and anon key.
+    const SUPABASE_URL = 'https://YOUR_PROJECT_REF.supabase.co';
+    const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    function SignupForm() {
+      const [form, setForm] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        gender: '',
+        acceptedTerms: false,
+      });
+
+      const [status, setStatus] = useState('');
+      const [error, setError] = useState('');
+
+      const handleChange = (event) => {
+        const { name, value, type, checked } = event.target;
+        setForm((prev) => ({
+          ...prev,
+          [name]: type === 'checkbox' ? checked : value,
+        }));
+      };
+
+      const validateForm = () => {
+        if (!form.firstName.trim() || !form.lastName.trim() || !form.email.trim()) {
+          setError('Please fill in all required fields.');
+          return false;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+          setError('Please enter a valid email address.');
+          return false;
+        }
+
+        if (form.password.length < 6) {
+          setError('Password must be at least 6 characters.');
+          return false;
+        }
+
+        if (form.password !== form.confirmPassword) {
+          setError('Passwords do not match.');
+          return false;
+        }
+
+        if (!form.acceptedTerms) {
+          setError('You must accept the terms and conditions.');
+          return false;
+        }
+
+        return true;
+      };
+
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        setError('');
+        setStatus('');
+
+        if (!validateForm()) {
+          return;
+        }
+
+        const { data, error: supabaseError } = await supabase.from('users').insert([
+          {
+            first_name: form.firstName,
+            last_name: form.lastName,
+            email: form.email,
+            password: form.password,
+            gender: form.gender,
+            accepted_terms: form.acceptedTerms,
+          },
+        ]);
+
+        if (supabaseError) {
+          setError(supabaseError.message || 'Unable to save your signup details.');
+          return;
+        }
+
+        setStatus('Signup successful! Your account has been saved to the database.');
+        setForm({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          gender: '',
+          acceptedTerms: false,
+        });
+      };
+
+      return (
+        <div className="signup-card">
+          <h2>User Signup Form</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="firstName">First Name *</label>
+                <input
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  placeholder="Enter your first name"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lastName">Last Name *</label>
+                <input
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  placeholder="Enter your last name"
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Email *</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="password">Password *</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Enter your password"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password *</label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm password"
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="gender">Gender</label>
+              <select id="gender" name="gender" value={form.gender} onChange={handleChange}>
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div className="checkbox-group">
+              <input
+                id="acceptedTerms"
+                name="acceptedTerms"
+                type="checkbox"
+                checked={form.acceptedTerms}
+                onChange={handleChange}
+              />
+              <label htmlFor="acceptedTerms">Accept Terms & Conditions</label>
+            </div>
+
+            <button type="submit" className="submit-button">
+              Submit
+            </button>
+          </form>
+
+          {error && <p className="message error">{error}</p>}
+          {status && !error && <p className="message">{status}</p>}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<SignupForm />);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Signup Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #111;
+    }
+
+    .signup-card {
+      width: min(520px, 92vw);
+      background: #fff;
+      border: 2px solid #111;
+      border-radius: 18px;
+      padding: 34px 36px;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-card h2 {
+      margin: 0 0 28px;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #999;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #111;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1 1 220px;
+      margin-bottom: 0;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 26px;
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      width: auto;
+      margin: 0;
+      transform: translateY(1px);
+    }
+
+    .submit-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .submit-button:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 480px) {
+      .signup-card {
+        padding: 24px;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="signup-card">
+    <h2>User Signup Form</h2>
+    <form>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" placeholder="Enter your first name" />
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name *</label>
+          <input type="text" id="lastName" placeholder="Enter your last name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password *</label>
+          <input type="password" id="password" placeholder="Enter your password" />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password *</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm password" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="">Select gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms" />
+        <label for="terms">Accept Terms &amp; Conditions</label>
+      </div>
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  </div>
+</body>
+
+</html>
