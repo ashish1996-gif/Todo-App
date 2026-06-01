@@ -1,140 +1,441 @@
+// let tasks = [];
+
+// let addBtn =
+// document.getElementById("addBtn");
+// addBtn.addEventListener("click", addTask);
+
+// // LOAD SAVED TASKS
+
+// let savedTasks =
+// JSON.parse(localStorage.getItem("tasks"));
+
+// if(savedTasks){
+
+//    tasks = savedTasks;
+
+//    tasks.forEach(function(task){
+
+//       createTask(task);
+
+//    });
+//    updateCounter();
+// }
+
+// // ADD TASK FUNCTION
+
+// function addTask(){
+
+//    let input =
+//    document.getElementById("taskInput");
+
+//    let taskText = input.value;
+
+//    if(taskText === ""){
+
+//       alert("Please enter task");
+
+//       return;
+
+//    }
+
+//    tasks.push(taskText);
+
+//    createTask(taskText);
+
+//    saveTasks();
+
+//    updateCounter();
+
+//    input.value = "";
+
+// }
+
+// // CREATE TASK FUNCTION
+
+// function createTask(taskText){
+
+//    let li = document.createElement("li");
+
+//    li.innerText = taskText;
+
+//    // COMPLETE TASK
+
+//    li.addEventListener("click", function(){
+
+//       li.classList.toggle("completed");
+
+//    });
+
+//    // DELETE BUTTON
+
+//    let deleteBtn =
+//    document.createElement("button");
+
+//    deleteBtn.innerText = "Delete";
+
+//    deleteBtn.addEventListener("click", function(event){
+
+//       event.stopPropagation();
+
+//       li.remove();
+
+//       tasks = tasks.filter(function(task){
+
+//          return task !== taskText;
+
+//       });
+
+//       saveTasks();
+
+//       updateCounter();
+
+//    });
+
+//    li.appendChild(deleteBtn);
+
+//    document.getElementById("taskList")
+//    .appendChild(li);
+
+// }
+
+// // UPDATE COUNTER
+
+// function updateCounter(){
+//    document.getElementById("counter")
+//    .innerText =
+//    `Total Tasks: ${tasks.length}`;
+// }
+
+// // SAVE TASKS
+
+// function saveTasks(){
+
+//    localStorage.setItem(
+//       "tasks",
+//       JSON.stringify(tasks)
+//    );
+
+// }
+
+// // ENTER KEY SUPPORT
+
+// document.getElementById("taskInput")
+// .addEventListener("keypress", function(event){
+
+//    if(event.key === "Enter"){
+
+//       addTask();
+
+//    }
+
+// });
+
+// document.getElementById("darkModeBtn")
+// .addEventListener("click", function(){
+
+//    document.body.classList.toggle("dark");
+//    classList.toggle("dark")
+// });
+
+
+// document.getElementById("darkModeBtn")
+// .addEventListener("click", function(){
+
+//    document.body.classList.toggle("dark");
+
+//    localStorage.setItem(
+//       "darkMode",
+//       document.body.classList.contains("dark")
+//    );
+
+// });
+
+// let darkMode =
+// localStorage.getItem("darkMode");
+
+// if(darkMode === "true"){
+
+//    document.body.classList.add("dark");
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let tasks = [];
 
-let addBtn =
-document.getElementById("addBtn");
-addBtn.addEventListener("click", addTask);
+// =====================
+// LOAD DATA ON START
+// =====================
 
-// LOAD SAVED TASKS
+let savedTasks = JSON.parse(localStorage.getItem("tasks"));
 
-let savedTasks =
-JSON.parse(localStorage.getItem("tasks"));
+if (savedTasks) {
+  tasks = savedTasks;
 
-if(savedTasks){
+  tasks.forEach((task) => {
+    createTask(task);
+  });
 
-   tasks = savedTasks;
-
-   tasks.forEach(function(task){
-
-      createTask(task);
-
-   });
-   updateCounter();
+  updateCounter();
 }
 
+// =====================
+// ADD TASK BUTTON
+// =====================
+
+document
+  .getElementById("addBtn")
+  .addEventListener("click", addTask);
+
+// =====================
 // ADD TASK FUNCTION
+// =====================
 
-function addTask(){
+function addTask() {
+  let input = document.getElementById("taskInput");
 
-   let input =
-   document.getElementById("taskInput");
+  let taskText = input.value.trim();
 
-   let taskText = input.value;
+  if (taskText === "") {
+    alert("Please enter task");
+    return;
+  }
 
-   if(taskText === ""){
+  let task = {
+    id: Date.now(),
+    text: taskText,
+    completed: false,
+  };
 
-      alert("Please enter task");
+  tasks.push(task);
 
-      return;
+  createTask(task);
 
-   }
+  saveTasks();
 
-   tasks.push(taskText);
+  updateCounter();
 
-   createTask(taskText);
-
-   saveTasks();
-
-   updateCounter();
-
-   input.value = "";
-
+  input.value = "";
 }
 
-// CREATE TASK FUNCTION
+// =====================
+// CREATE TASK
+// =====================
 
-function createTask(taskText){
+function createTask(task) {
+  let li = document.createElement("li");
 
-   let li = document.createElement("li");
+  li.setAttribute("data-id", task.id);
 
-   li.innerText = taskText;
+  if (task.completed) {
+    li.classList.add("completed");
+  }
 
-   // COMPLETE TASK
+  // Task Text
 
-   li.addEventListener("click", function(){
+  let span = document.createElement("span");
 
-      li.classList.toggle("completed");
+  span.innerText = task.text;
 
-   });
+  span.classList.add("task-text");
 
-   // DELETE BUTTON
+  // Complete Task
 
-   let deleteBtn =
-   document.createElement("button");
+  span.addEventListener("click", function () {
+    li.classList.toggle("completed");
 
-   deleteBtn.innerText = "Delete";
+    task.completed = !task.completed;
 
-   deleteBtn.addEventListener("click", function(event){
+    saveTasks();
+  });
 
-      event.stopPropagation();
+  // Edit Button
 
-      li.remove();
+  let editBtn = document.createElement("button");
 
-      tasks = tasks.filter(function(task){
+  editBtn.innerText = "Edit";
 
-         return task !== taskText;
+  editBtn.classList.add("editBtn");
 
-      });
+  editBtn.addEventListener("click", function () {
+    let updatedTask = prompt(
+      "Edit your task",
+      task.text
+    );
 
-      saveTasks();
+    if (updatedTask === null) return;
 
-      updateCounter();
+    updatedTask = updatedTask.trim();
 
-   });
+    if (updatedTask === "") return;
 
-   li.appendChild(deleteBtn);
+    task.text = updatedTask;
 
-   document.getElementById("taskList")
-   .appendChild(li);
+    span.innerText = updatedTask;
 
+    saveTasks();
+  });
+
+  // Delete Button
+
+  let deleteBtn = document.createElement("button");
+
+  deleteBtn.innerText = "Delete";
+
+  deleteBtn.classList.add("deleteBtn");
+
+  deleteBtn.addEventListener("click", function () {
+    li.remove();
+
+    tasks = tasks.filter((t) => {
+      return t.id !== task.id;
+    });
+
+    saveTasks();
+
+    updateCounter();
+  });
+
+  // Button Container
+
+  let buttonDiv = document.createElement("div");
+
+  buttonDiv.classList.add("task-buttons");
+
+  buttonDiv.appendChild(editBtn);
+
+  buttonDiv.appendChild(deleteBtn);
+
+  li.appendChild(span);
+
+  li.appendChild(buttonDiv);
+
+  document
+    .getElementById("taskList")
+    .appendChild(li);
 }
 
+// =====================
 // UPDATE COUNTER
+// =====================
 
-function updateCounter(){
-   document.getElementById("counter")
-   .innerText =
-   `Total Tasks: ${tasks.length}`;
+function updateCounter() {
+  document.getElementById(
+    "counter"
+  ).innerText = `Total Tasks: ${tasks.length}`;
 }
 
+// =====================
 // SAVE TASKS
+// =====================
 
-function saveTasks(){
-
-   localStorage.setItem(
-      "tasks",
-      JSON.stringify(tasks)
-   );
-
+function saveTasks() {
+  localStorage.setItem(
+    "tasks",
+    JSON.stringify(tasks)
+  );
 }
 
+// =====================
 // ENTER KEY SUPPORT
+// =====================
 
-document.getElementById("taskInput")
-.addEventListener("keypress", function(event){
-
-   if(event.key === "Enter"){
-
+document
+  .getElementById("taskInput")
+  .addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
       addTask();
+    }
+  });
 
-   }
+// =====================
+// SEARCH TASKS
+// =====================
 
-});
+document
+  .getElementById("searchInput")
+  .addEventListener("input", function () {
+    let searchText =
+      this.value.toLowerCase();
 
-document.getElementById("darkModeBtn")
-.addEventListener("click", function(){
+    let allTasks =
+      document.querySelectorAll("#taskList li");
 
-   document.body.classList.toggle("dark");
+    allTasks.forEach((task) => {
+      if (
+        task.innerText
+          .toLowerCase()
+          .includes(searchText)
+      ) {
+        task.style.display = "flex";
+      } else {
+        task.style.display = "none";
+      }
+    });
+  });
 
-});
+// =====================
+// CLEAR ALL TASKS
+// =====================
 
+document
+  .getElementById("clearAllBtn")
+  .addEventListener("click", function () {
+    let confirmDelete =
+      confirm(
+        "Are you sure you want to delete all tasks?"
+      );
 
+    if (!confirmDelete) return;
+
+    tasks = [];
+
+    document.getElementById(
+      "taskList"
+    ).innerHTML = "";
+
+    saveTasks();
+
+    updateCounter();
+  });
+
+// =====================
+// DARK MODE
+// =====================
+
+let darkMode =
+  localStorage.getItem("darkMode");
+
+if (darkMode === "true") {
+  document.body.classList.add("dark");
+}
+
+document
+  .getElementById("darkModeBtn")
+  .addEventListener("click", function () {
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+      "darkMode",
+      document.body.classList.contains(
+        "dark"
+      )
+    );
+  });
+
+// =====================
+// INITIAL COUNTER
+// =====================
+
+updateCounter();
